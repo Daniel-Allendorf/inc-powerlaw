@@ -1,0 +1,28 @@
+benchmark_executable="$1"
+
+bench_dir="benchmarks-statistics"
+if ! test -d "$bench_dir"
+then
+ mkdir "$bench_dir"
+fi
+
+for p in {2..32} ; do
+ echo "Starting parallel min-d_2 inter-$p"
+ bench_file="$bench_dir/parallel_min-d_2_inter_$p"
+ "$benchmark_executable" bench_parallel "$p" 2000 1 16 16 2 >> "$bench_file"
+ "$benchmark_executable" bench_parallel "$p" 500 1 20 20 2 >> "$bench_file"
+ "$benchmark_executable" bench_parallel "$p" 100 1 24 24 2 >> "$bench_file"
+done
+
+for p in {2..32} ; do
+ echo "Starting parallel min-d_3 inter-$p"
+ bench_file="$bench_dir/parallel_min-d_3_inter_$p"
+ "$benchmark_executable" bench_parallel "$p" 2000 1 16 16 3 >> "$bench_file"
+ "$benchmark_executable" bench_parallel "$p" 500 1 20 20 3 >> "$bench_file"
+done
+
+for p in {2..26} ; do
+ echo "Starting parallel min-d_3 inter-$p"
+ bench_file="$bench_dir/parallel_min-d_3_inter_$p"
+ "$benchmark_executable" bench_parallel "$p" 100 1 24 24 3 >> "$bench_file"
+done

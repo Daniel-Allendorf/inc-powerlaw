@@ -1,0 +1,21 @@
+mcmc_executable="$1"
+
+bench_dir="benchmarks-statistics"
+if ! test -d "$bench_dir"
+then
+ mkdir "$bench_dir"
+fi
+
+echo "Starting mcmc_dep_n"
+bench_file="$bench_dir/mcmc_dep_n"
+"$mcmc_executable" -s 5 -g 2 -n 10 -m 13 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 14 -m 16 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 17 -m 20 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 21 -m 21 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 22 -m 22 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 23 -m 23 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 24 -m 24 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 25 -m 25 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 26 -m 25 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 27 -m 27 >> "$bench_file"
+"$mcmc_executable" -s 5 -g 2 -n 28 -m 28 >> "$bench_file"

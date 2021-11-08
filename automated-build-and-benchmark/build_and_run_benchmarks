@@ -1,0 +1,21 @@
+build_dir="build_$(date '+%Y-%m-%d_%H-%M-%S')"
+./build "$build_dir"
+cd "$build_dir"
+
+benchmark_executable='benchmark/BenchmarkIncPowerlawGraphSampler'
+mcmc_executable='../../benchmark/edge_switching.py'
+if test -f "$benchmark_executable"
+then
+ echo "Build done. Starting benchmarks..."
+ ../run_benchmarks "$benchmark_executable"
+ ../run_benchmarks_d-min_parallel "$benchmark_executable"
+ ../run_benchmarks_gamma "$benchmark_executable"
+ ../run_benchmarks_mcmc "$mcmc_executable"
+ ../run_benchmarks_parallel "$benchmark_executable"
+ ../run_arl "benchmark/BenchmarkIncPowerlawGraphSamplerARL"
+ echo "Benchmarks finished. Updating results."
+ cp benchmarks-statistics/* ../results
+ cp accept-reject-log/* ../results
+else
+ echo "Something went wrong with build. Not running benchmarks"
+fi

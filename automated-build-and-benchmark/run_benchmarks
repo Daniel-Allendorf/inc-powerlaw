@@ -1,0 +1,29 @@
+benchmark_executable="$1"
+
+bench_dir="benchmarks-statistics"
+if ! test -d "$bench_dir"
+then
+ mkdir "$bench_dir"
+fi
+
+# dependence on n
+echo "Starting dep_n"
+bench_file="$bench_dir/dep_n"
+"$benchmark_executable" bench 800 1 10 13 >> "$bench_file"
+"$benchmark_executable" bench 400 1 10 16 >> "$bench_file"
+"$benchmark_executable" bench 200 1 10 20 >> "$bench_file"
+"$benchmark_executable" bench 100 1 10 28 >> "$bench_file"
+
+echo "Starting dep_min-d_2"
+bench_file="$bench_dir/dep_min-d_2"
+"$benchmark_executable" bench 800 1 10 13 2 >> "$bench_file"
+"$benchmark_executable" bench 400 1 10 16 2 >> "$bench_file"
+"$benchmark_executable" bench 200 1 10 20 2 >> "$bench_file"
+"$benchmark_executable" bench 100 1 10 28 2 >> "$bench_file"
+
+echo "Starting dep_min-d_3"
+bench_file="$bench_dir/dep_min-d_3"
+"$benchmark_executable" bench 800 1 10 13 3 >> "$bench_file"
+"$benchmark_executable" bench 400 1 10 16 3 >> "$bench_file"
+"$benchmark_executable" bench 200 1 10 20 3 >> "$bench_file"
+"$benchmark_executable" bench 100 1 10 28 3 >> "$bench_file"

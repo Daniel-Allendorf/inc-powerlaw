@@ -1,0 +1,11 @@
+if test "$1"
+then
+ build_dir="$1"
+else
+ build_dir="build_$(date '+%Y-%m-%d_%H-%M-%S')"
+fi
+echo "Starting build in directory $build_dir"
+mkdir "$build_dir"
+cd "$build_dir"
+cmake -DACCEPT_REJECT_LOG=On -DCMAKE_BUILD_TYPE=Release -GNinja ../../
+ninja

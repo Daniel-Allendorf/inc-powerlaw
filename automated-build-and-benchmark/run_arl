@@ -1,0 +1,25 @@
+arl_executable="$1"
+
+log_dir="accept-reject-log"
+if ! test -d "$log_dir"
+then
+ mkdir "$log_dir"
+fi
+
+echo "Starting arl_min-d_1"
+"$arl_executable" bench 500 1 16 16 1 >> "$log_dir/arl_n_16_min-d_1"
+"$arl_executable" bench 300 1 20 20 1 >> "$log_dir/arl_n_20_min-d_1"
+"$arl_executable" bench 200 1 24 24 1 >> "$log_dir/arl_n_24_min-d_1"
+"$arl_executable" bench 100 1 28 28 1 >> "$log_dir/arl_n_28_min-d_1"
+
+echo "Starting arl_min-d_2"
+"$arl_executable" bench 500 1 16 16 2 >> "$log_dir/arl_n_16_min-d_2"
+"$arl_executable" bench 300 1 20 20 2 >> "$log_dir/arl_n_20_min-d_2"
+"$arl_executable" bench 200 1 24 24 2 >> "$log_dir/arl_n_24_min-d_2"
+"$arl_executable" bench 100 1 28 28 2 >> "$log_dir/arl_n_28_min-d_2"
+
+echo "Starting arl_min-d_3"
+"$arl_executable" bench 500 1 16 16 3 >> "$log_dir/arl_n_16_min-d_3"
+"$arl_executable" bench 300 1 20 20 3 >> "$log_dir/arl_n_20_min-d_3"
+"$arl_executable" bench 200 1 24 24 3 >> "$log_dir/arl_n_24_min-d_3"
+"$arl_executable" bench 100 1 28 28 3 >> "$log_dir/arl_n_28_min-d_3"
