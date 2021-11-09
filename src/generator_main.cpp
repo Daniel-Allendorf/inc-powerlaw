@@ -1,5 +1,7 @@
+#include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include <optional>
 #include <random>
 #include <thread>
@@ -44,11 +46,17 @@ struct Config {
         parser.add_unsigned('b', "maxdegree", config.max_degree,
                             "Maximum degree; if not provided, a value based on n and gamma is computed");
         parser.add_double('g', "gamma", config.gamma, "Power law exponent");
-        parser.add_string('i', "degseq", config.input_path, "Path to degree sequence (single line per node; sorted). If empty STDIN");
+        parser.add_string('i', "degseq", config.input_path, "Path to degree sequence (one line per node; will be sorted decreasingly). - means STDIN");
 
-        parser.add_string('o', "output", config.output_path, "Path to output; if not provided use STDERR");
+        parser.add_string('o', "output", config.output_path, "Path to output (in METIS format); if not provided use STDERR");
 
-        parser.process(argc, argv);
+        if (!parser.process(argc, argv))
+            return {};
+
+        if (config.gamma <= 1) {
+            std::cout << "gamma has to be strictly larger than 1 and should be at least " << kGamma << "\n";
+            return {};
+        }
 
         if (config.gamma < kGamma) {
             std::cout << "!!! Only gamma values of at least " << kGamma
@@ -83,6 +91,7 @@ struct Config {
                 std::cout << "If you specify an external input source (-i), you may not set (-n, -a, -b)" << std::endl;
                 return {};
             }
+            config.input_source = InputSource::File;
         }
 
         return {config};
@@ -104,17 +113,22 @@ auto get_degree_sequence(const Config &config) {
             }
 
             case Config::InputSource::File: {
-                if (!config.input_path.empty()) {
+                std::vector<count> degseq;
+
+                if (config.input_path != "-") {
                     std::ifstream file{config.input_path};
-                    return incpwl::read_degree_sequence(file);
+                    degseq = incpwl::read_degree_sequence(file);
+                } else {
+                    std::cout << "Expect degree sequence from STDIN" << std::endl;
+                    degseq = incpwl::read_degree_sequence(std::cin);
                 }
 
-                std::cout << "Expect degree sequence from STDIN" << std::endl;
-                return incpwl::read_degree_sequence(std::cin);
+                std::sort(begin(degseq), end(degseq), std::greater<count>());
+                return degseq;
             }
 
             default:
-                die("Unsupported input source");
+                die("Unsupported input source; use --help to view arguments");
         }
     }();
 

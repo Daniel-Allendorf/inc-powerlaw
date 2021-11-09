@@ -32,12 +32,12 @@ AdjacencyVector AdjacencyVector::from_adjacency_list(const AdjacencyList &from) 
 }
 
 void AdjacencyVector::write_metis(std::ostream &os) const {
-    auto num_edges = ranges::accumulate(degrees(), 0);
+    auto num_edges = ranges::accumulate(degrees(), 0) / 2;
 
-    os << num_nodes() << " " << num_edges << "\n";
+    os << num_nodes() << " " << num_edges;
     for(auto u : nodes())
         for(auto [i, v] : ranges::views::enumerate(neighbors(u)))
-            os << (i ? " " : "\n") << v;
+            os << (i ? ' ' : '\n') << v;
     os << "\n";
 }
 

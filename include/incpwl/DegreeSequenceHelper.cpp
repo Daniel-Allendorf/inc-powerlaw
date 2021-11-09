@@ -12,8 +12,12 @@
 namespace incpwl {
 
 std::vector<count> generate_degree_sequence(std::mt19937_64 &gen, std::size_t n, double gamma, count min_degree, count max_degree) {
+    if (gamma <= 0)
+        throw std::range_error("gamma has to be strictly larger than 1");
+
     if (!max_degree)
         max_degree = std::pow(n, 1. / (gamma - 1));
+
     std::vector<count> degree_sequence;
     PowerlawDegreeSequence sequence_generator(min_degree, max_degree, -gamma);
     sequence_generator.run();
@@ -26,15 +30,15 @@ std::vector<count> generate_degree_sequence(std::mt19937_64 &gen, std::size_t n,
     return degree_sequence;
 }
 
-std::vector<count> read_degree_sequence(std::istream &input) {
+std::vector<count> read_degree_sequence(std::istream &input, bool require_sorted) {
     std::vector<count> degree_sequence;
     std::string line;
-    while (getline(input, line)) {
+    while (getline(input, line) && !line.empty()) {
         count degree = std::stoul(line);
         degree_sequence.push_back(degree);
     }
 
-    if (!std::is_sorted(degree_sequence.begin(), degree_sequence.end(), std::greater<count>()))
+    if (require_sorted && !std::is_sorted(degree_sequence.begin(), degree_sequence.end(), std::greater<count>()))
         throw std::runtime_error("Degree sequence is not sorted");
 
     return degree_sequence;
